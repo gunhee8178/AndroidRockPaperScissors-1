@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final GifView gifView = (GifView) findViewById(R.id.imageView);
         final Button localPlay = (Button) findViewById(R.id.localPlay);
         final Button leaderboard = (Button) findViewById(R.id.leaderboard);
 
