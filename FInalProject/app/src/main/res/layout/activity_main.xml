@@ -10,7 +10,7 @@
     android:background="#FFFFFF"
     tools:context="com.example.ryan.finalproject.MainActivity">
 
-    <ImageView
+    <com.example.ryan.finalproject.GifView
         android:layout_width="240dp"
         android:layout_height="150dp"
         android:id="@+id/imageView"
