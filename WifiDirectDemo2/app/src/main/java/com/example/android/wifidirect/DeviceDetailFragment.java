@@ -108,9 +108,21 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                     public void onClick(View v) {
                         // Allow user to pick an image from Gallery or other
                         // registered apps
-                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.setType("image/*");
-                        startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
+                        //Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        //intent.setType("image/*");
+                        //startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
+												
+												String message = "rock/paper/scissors";
+												TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
+												statusText.setText("Sending: " + message);
+												Log.d(WiFiDirectActivity.TAG, "Intent----------- " + message);
+												Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
+												serviceIntent.setAction(FileTransferService.ACTION_SEND_MOVE);
+												serviceIntent.putExtra(FileTransferService.SEND_MESSAGE, message);
+												serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
+																info.groupOwnerAddress.getHostAddress());
+												serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
+												getActivity().startService(serviceIntent);
                     }
                 });
 
@@ -221,48 +233,53 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
             this.statusText = (TextView) statusText;
         }
 
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                ServerSocket serverSocket = new ServerSocket(8988);
-                Log.d(WiFiDirectActivity.TAG, "Server: Socket opened");
-                Socket client = serverSocket.accept();
-                Log.d(WiFiDirectActivity.TAG, "Server: connection done");
-                final File f = new File(Environment.getExternalStorageDirectory() + "/"
-                        + context.getPackageName() + "/wifip2pshared-" + System.currentTimeMillis()
-                        + ".jpg");
-
-                File dirs = new File(f.getParent());
-                if (!dirs.exists())
-                    dirs.mkdirs();
-                f.createNewFile();
-
-                Log.d(WiFiDirectActivity.TAG, "server: copying files " + f.toString());
-                InputStream inputstream = client.getInputStream();
-                copyFile(inputstream, new FileOutputStream(f));
-                serverSocket.close();
-                return f.getAbsolutePath();
-            } catch (IOException e) {
-                Log.e(WiFiDirectActivity.TAG, e.getMessage());
-                return null;
-            }
-        }
-
-        /*
-         * (non-Javadoc)
-         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-         */
-        @Override
-        protected void onPostExecute(String result) {
-            if (result != null) {
-                statusText.setText("File copied - " + result);
-                Intent intent = new Intent();
-                intent.setAction(android.content.Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse("file://" + result), "image/*");
-                context.startActivity(intent);
-            }
-
-        }
+       @Override
+				protected String doInBackground(Void... params) {
+						ServerSocket serverSocket = null;
+						Socket client = null;
+						DataInputStream inputstream = null;
+						try {
+								serverSocket = new ServerSocket(8988);
+								client = serverSocket.accept();
+								inputstream = new DataInputStream(client.getInputStream());
+								String str = inputstream.readUTF();
+								serverSocket.close();
+								return str;
+						} catch (IOException e) {
+								Log.e(WiFiDirectActivity.TAG, e.getMessage());
+								return null;
+						}finally{
+								if(inputstream != null){
+									 try{
+											inputstream.close();
+									 } catch (IOException e) {
+											Log.e(WiFiDirectActivity.TAG, e.getMessage());
+									 }
+								}
+								if(client != null){
+									 try{
+											client.close();
+									 } catch (IOException e) {
+											Log.e(WiFiDirectActivity.TAG, e.getMessage());
+									 }
+								}
+								 if(serverSocket != null){
+									 try{
+											serverSocket.close();
+									 } catch (IOException e) {
+											Log.e(WiFiDirectActivity.TAG, e.getMessage());
+									 }
+								}
+						}
+				}
+				
+				@Override
+				protected void onPostExecute(String result) {
+						if (result != null) {
+							Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+						}
+						statusText.setText("Closing the server socket");
+				}
 
         /*
          * (non-Javadoc)
