@@ -112,17 +112,17 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                         //intent.setType("image/*");
                         //startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
 												
-												String message = "rock/paper/scissors";
-												TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
-												statusText.setText("Sending: " + message);
-												Log.d(WiFiDirectActivity.TAG, "Intent----------- " + message);
-												Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
-												serviceIntent.setAction(FileTransferService.ACTION_SEND_MOVE);
-												serviceIntent.putExtra(FileTransferService.SEND_MESSAGE, message);
-												serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
-																info.groupOwnerAddress.getHostAddress());
-												serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
-												getActivity().startService(serviceIntent);
+			String message = "rock/paper/scissors";
+			TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
+			statusText.setText("Sending: " + message);
+			Log.d(WiFiDirectActivity.TAG, "Intent----------- " + message);
+			Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
+			serviceIntent.setAction(FileTransferService.ACTION_SEND_MOVE);
+			serviceIntent.putExtra(FileTransferService.SEND_MESSAGE, message);
+			serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
+							info.groupOwnerAddress.getHostAddress());
+			serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
+			getActivity().startService(serviceIntent);
                     }
                 });
 
@@ -232,54 +232,54 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
             this.context = context;
             this.statusText = (TextView) statusText;
         }
-
-       @Override
-				protected String doInBackground(Void... params) {
-						ServerSocket serverSocket = null;
-						Socket client = null;
-						DataInputStream inputstream = null;
-						try {
-								serverSocket = new ServerSocket(8988);
-								client = serverSocket.accept();
-								inputstream = new DataInputStream(client.getInputStream());
-								String str = inputstream.readUTF();
-								serverSocket.close();
-								return str;
-						} catch (IOException e) {
-								Log.e(WiFiDirectActivity.TAG, e.getMessage());
-								return null;
-						}finally{
-								if(inputstream != null){
-									 try{
-											inputstream.close();
-									 } catch (IOException e) {
-											Log.e(WiFiDirectActivity.TAG, e.getMessage());
-									 }
-								}
-								if(client != null){
-									 try{
-											client.close();
-									 } catch (IOException e) {
-											Log.e(WiFiDirectActivity.TAG, e.getMessage());
-									 }
-								}
-								 if(serverSocket != null){
-									 try{
-											serverSocket.close();
-									 } catch (IOException e) {
-											Log.e(WiFiDirectActivity.TAG, e.getMessage());
-									 }
-								}
-						}
-				}
-				
-				@Override
-				protected void onPostExecute(String result) {
-						if (result != null) {
-							Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-						}
-						statusText.setText("Closing the server socket");
-				}
+        
+        @Override
+	protected String doInBackground(Void... params) {
+		ServerSocket serverSocket = null;
+		Socket client = null;
+		DataInputStream inputstream = null;
+		try {
+			serverSocket = new ServerSocket(8988);
+			client = serverSocket.accept();
+			inputstream = new DataInputStream(client.getInputStream());
+			String str = inputstream.readUTF();
+			serverSocket.close();
+			return str;
+		} catch (IOException e) {
+			Log.e(WiFiDirectActivity.TAG, e.getMessage());
+			return null;
+		}finally{
+			if(inputstream != null){
+				 try{
+					inputstream.close();
+				 } catch (IOException e) {
+					Log.e(WiFiDirectActivity.TAG, e.getMessage());
+				 }
+			}
+			if(client != null){
+				 try{
+					client.close();
+				 } catch (IOException e) {
+					Log.e(WiFiDirectActivity.TAG, e.getMessage());
+				 }
+			}
+			 if(serverSocket != null){
+				 try{
+					serverSocket.close();
+				 } catch (IOException e) {
+					Log.e(WiFiDirectActivity.TAG, e.getMessage());
+				 }
+			}
+		}
+	}
+	
+	@Override
+	protected void onPostExecute(String result) {
+		if (result != null) {
+			Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+		}
+		statusText.setText("Closing the server socket");
+	}
 
         /*
          * (non-Javadoc)
