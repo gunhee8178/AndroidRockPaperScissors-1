@@ -19,7 +19,6 @@ package com.example.android.wifidirect;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.WpsInfo;
@@ -29,17 +28,16 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -139,7 +137,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         statusText.setText("Sending: " + uri);
         Log.d(WiFiDirectActivity.TAG, "Intent----------- " + uri);
         Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
-        serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
+        serviceIntent.setAction(FileTransferService.ACTION_SEND_MOVE);
         serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, uri.toString());
         serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
                 info.groupOwnerAddress.getHostAddress());
@@ -276,7 +274,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 	@Override
 	protected void onPostExecute(String result) {
 		if (result != null) {
-			Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
 		}
 		statusText.setText("Closing the server socket");
 	}
