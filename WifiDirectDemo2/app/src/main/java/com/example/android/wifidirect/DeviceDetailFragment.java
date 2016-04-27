@@ -38,6 +38,8 @@ import android.widget.TextView;
 
 import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
 
+import java.io.DataInputStream;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -112,17 +114,19 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                         //intent.setType("image/*");
                         //startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
 												
-												String message = "rock/paper/scissors";
-												TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
-												statusText.setText("Sending: " + message);
-												Log.d(WiFiDirectActivity.TAG, "Intent----------- " + message);
-												Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
-												serviceIntent.setAction(FileTransferService.ACTION_SEND_MOVE);
-												serviceIntent.putExtra(FileTransferService.SEND_MESSAGE, message);
-												serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
-																info.groupOwnerAddress.getHostAddress());
-												serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
-												getActivity().startService(serviceIntent);
+												String message = "start playing";
+                        TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
+                        statusText.setText("Sending: " + message);
+                        Log.d(WiFiDirectActivity.TAG, "Intent----------- " + message);
+                        Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
+                        serviceIntent.setAction(FileTransferService.ACTION_SEND_MOVE);
+                        serviceIntent.putExtra(FileTransferService.SEND_MESSAGE, message);
+                        serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS, info.groupOwnerAddress.getHostAddress());
+                        serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
+                        getActivity().startService(serviceIntent);
+
+                        Intent intent = new Intent(getActivity().getApplicationContext(), networkPlayer.class);
+                        startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
                     }
                 });
 
@@ -134,13 +138,13 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
         // User has picked an image. Transfer it to group owner i.e peer using
         // FileTransferService.
-        Uri uri = data.getData();
+        p1move = data.getStringExtra("p1Move");
         TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
-        statusText.setText("Sending: " + uri);
-        Log.d(WiFiDirectActivity.TAG, "Intent----------- " + uri);
+        statusText.setText("Sending: " + p1move);
+        Log.d(WiFiDirectActivity.TAG, "Intent----------- " + p1move);
         Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
-        serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
-        serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, uri.toString());
+        serviceIntent.setAction(FileTransferService.ACTION_SEND_MOVE);
+        serviceIntent.putExtra(FileTransferService.SEND_MESSAGE, p1move);
         serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
                 info.groupOwnerAddress.getHostAddress());
         serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
@@ -276,7 +280,18 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 				@Override
 				protected void onPostExecute(String result) {
 						if (result != null) {
-							Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+							Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+							if (result == "start playing"){
+								Intent intent = new Intent();
+									intent.setClass(context, networkPlayer.class);
+									startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
+							} else {
+								Intent intent = new Intent();
+								intent.setClass(context, networkResult.class);
+								intent.putExtra("p1move", p1move);
+								intent.putExtra("p2move", result);
+								startActivity(intent);
+							}
 						}
 						statusText.setText("Closing the server socket");
 				}
