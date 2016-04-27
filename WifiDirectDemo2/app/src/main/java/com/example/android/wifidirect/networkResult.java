@@ -51,6 +51,9 @@ public class networkResult extends Activity {
         if(p1_move.equals("paper") && p2_move.equals("rock")) {
             p1_winner = true;
         }
+				if(!p1_move.equals("nothing") && p2_move.equals("nothing")) {
+            p1_winner = true;
+        }
 
         if(p1_winner) {
             winner.setText("Player 1 wins!");

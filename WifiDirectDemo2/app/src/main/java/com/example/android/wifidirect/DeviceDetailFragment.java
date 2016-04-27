@@ -138,7 +138,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
         // User has picked an image. Transfer it to group owner i.e peer using
         // FileTransferService.
-        p1move = data.getStringExtra("p1Move");
+        p1move = data.getStringExtra("p1move");
         TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
         statusText.setText("Sending: " + p1move);
         Log.d(WiFiDirectActivity.TAG, "Intent----------- " + p1move);
@@ -283,13 +283,13 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 							Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
 							if (result == "start playing"){
 								Intent intent = new Intent();
-									intent.setClass(context, networkPlayer.class);
-									startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
+								intent.setClass(context, networkPlayer.class);
+								startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
 							} else {
 								Intent intent = new Intent();
 								intent.setClass(context, networkResult.class);
-								intent.putExtra("p1move", p1move);
-								intent.putExtra("p2move", result);
+								intent.putExtra("p1Move", p1move);
+								intent.putExtra("p2Move", result);
 								startActivity(intent);
 							}
 						}

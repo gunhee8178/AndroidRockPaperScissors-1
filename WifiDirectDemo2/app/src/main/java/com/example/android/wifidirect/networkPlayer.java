@@ -3,12 +3,22 @@ package com.example.android.wifidirect;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
 public class networkPlayer extends Activity{
 
     Intent intent;
+		
+		Handler handler = new Handler();
+    Runnable r=new Runnable() {
+        @Override
+        public void run() {
+            finish();
+        }
+    };
+		
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,8 +27,9 @@ public class networkPlayer extends Activity{
         Intent last_intent = getIntent();
 
         intent = new Intent();
-
-        intent.putExtra("p1_wins",last_intent.getStringExtra("p1_wins"));
+				intent.putExtra("p1move", "nothing");
+        
+				intent.putExtra("p1_wins",last_intent.getStringExtra("p1_wins"));
         intent.putExtra("p2_wins",last_intent.getStringExtra("p2_wins"));
         intent.putExtra("draws",last_intent.getStringExtra("draws"));
 
@@ -28,27 +39,28 @@ public class networkPlayer extends Activity{
 
         rock.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                intent.putExtra("p1Move", "rock");
+                intent.putExtra("p1move", "rock");
 								setResult(DeviceDetailFragment.CHOOSE_FILE_RESULT_CODE, intent);
-                finish();
+                //finish();
             }
         });
 
         paper.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                intent.putExtra("p1Move", "paper");
+                intent.putExtra("p1move", "paper");
 								setResult(DeviceDetailFragment.CHOOSE_FILE_RESULT_CODE, intent);
-                finish();
+                //finish();
             }
         });
 
         scissors.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                intent.putExtra("p1Move", "scissors");
+                intent.putExtra("p1move", "scissors");
 								setResult(DeviceDetailFragment.CHOOSE_FILE_RESULT_CODE, intent);
-                finish();
+                //finish();
             }
         });
-
+				
+				handler.postDelayed(r, 3000);
     }
 }
