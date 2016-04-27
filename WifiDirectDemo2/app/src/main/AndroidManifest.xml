@@ -28,6 +28,8 @@
                     android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+				<activity android:name=".networkPlayer" />
+        <activity android:name=".networkResult" />
 
         <!-- Used for transferring files  after a successful connection -->
         <service android:enabled="true" android:name=".FileTransferService" />
