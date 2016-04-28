@@ -16,6 +16,7 @@
 
 package com.example.android.wifidirect;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -28,6 +29,7 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -278,20 +280,38 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 				}
 				
 				@Override
-				protected void onPostExecute(String result) {
+				protected void onPostExecute(final String result) {
 						if (result != null) {
 							Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
-							if (result == "start playing"){
-								Intent intent = new Intent();
-								intent.setClass(context, networkPlayer.class);
-								startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
-							} else {
-								Intent intent = new Intent();
-								intent.setClass(context, networkResult.class);
-								intent.putExtra("p1Move", p1move);
-								intent.putExtra("p2Move", result);
-								startActivity(intent);
-							}
+							if (result.equals("start playing")) {
+                    Intent intent = new Intent();
+                    intent.setClass(context, networkPlayer.class);
+                    Activity act = (Activity) context;
+                    act.startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
+                } else {
+                    /*Intent intent = new Intent();
+                    intent.setClass(context, networkResult.class);
+                    intent.putExtra("p1Move", p1move);
+                    intent.putExtra("p2Move", result);
+                    context.startActivity(intent);*/
+
+                    // handler to wait for p1move before starting networkResults activity
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!p1move.isEmpty()) {
+                                handler.postDelayed(this, 1000);
+                            } else {
+                                Intent intent = new Intent();
+                                intent.setClass(context, networkResult.class);
+                                intent.putExtra("p1Move", p1move);
+                                intent.putExtra("p2Move", result);
+                                context.startActivity(intent);
+                            }
+                        }
+                    }, 1000);
+                }
 						}
 						statusText.setText("Closing the server socket");
 				}
