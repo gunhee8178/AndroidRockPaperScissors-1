@@ -1,12 +1,14 @@
 package com.example.ryan.finalproject;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -28,12 +30,20 @@ public class leaderboard extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new LeaderboardAdapter(getApplicationContext());
-        new getLeaders().execute("");
 
         View headerView = (View) LayoutInflater.from(getApplicationContext()).inflate(R.layout.leaderboard, null);
         getListView().addHeaderView(headerView);
 
         getListView().setAdapter(adapter);
+
+        final Button back = (Button) findViewById(R.id.LeaderBack);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         new getLeaders().execute("");
 
@@ -76,7 +86,7 @@ public class leaderboard extends ListActivity {
                 List list = readJsonStream(stream);
                 for(int i = 0; i < list.size(); i++) {
                     User tmp = (User) list.get(i);
-                    LeaderBoxes leaderItem = new LeaderBoxes(Integer.toString(i),tmp.user_name,tmp.wins);
+                    LeaderBoxes leaderItem = new LeaderBoxes(Integer.toString(i+1),tmp.user_name,tmp.wins,tmp.losses,tmp.draws);
                     adapter.add(leaderItem);
                 }
             }

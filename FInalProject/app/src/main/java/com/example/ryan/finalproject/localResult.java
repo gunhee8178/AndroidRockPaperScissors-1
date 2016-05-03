@@ -1,7 +1,9 @@
 package com.example.ryan.finalproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -9,11 +11,17 @@ import android.widget.TextView;
 
 public class localResult extends AppCompatActivity {
 
+    public static final String PREFS_NAME = "MyPrefsFile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_result);
+
+        final String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        String username = settings.getString("username","");
 
         final Intent intent = getIntent();
         final Intent playAgainIntent = new Intent(getApplicationContext(),localPlayerOne.class);
@@ -41,6 +49,7 @@ public class localResult extends AppCompatActivity {
             winner.setText("DRAW");
             draws = draws + 1;
             draw = true;
+            new updateRecord().execute(android_id,"d");
         }
         if(p1_move.equals("rock") && p2_move.equals("scissors")) {
             p1_winner = true;
@@ -53,12 +62,14 @@ public class localResult extends AppCompatActivity {
         }
 
         if(p1_winner) {
-            winner.setText("Player 1 wins!");
+            winner.setText(username+" wins!");
             p1_wins = p1_wins + 1;
+            new updateRecord().execute(android_id,"w");
         }
         if(!p1_winner && !draw) {
             winner.setText("Player 2 wins!");
             p2_wins = p2_wins + 1;
+            new updateRecord().execute(android_id,"l");
         }
 
         p1_ratio.append(p1_wins+"-"+p2_wins+"-"+draws);

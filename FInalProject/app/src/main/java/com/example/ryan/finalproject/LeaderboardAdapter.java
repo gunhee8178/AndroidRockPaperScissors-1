@@ -74,7 +74,7 @@ public class LeaderboardAdapter extends BaseAdapter {
         nameView.setText(leaderBadge.name);
 
         final TextView winsView = (TextView) itemLayout.findViewById(R.id.rank_name);
-        winsView.setText(leaderBadge.wins);
+        winsView.setText(leaderBadge.wins+"-"+leaderBadge.losses+"-"+leaderBadge.draws);
 
 //        Drawable drawable = new BitmapDrawable(mContext.getResources(), placeBadge.flagBit);
 //        final ImageView flagView = (ImageView) itemLayout.findViewById(R.id.flag_image);

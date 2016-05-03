@@ -10,9 +10,10 @@
     android:background="#FFFFFF"
     tools:context="com.example.ryan.finalproject.MainActivity">
 
-    <com.example.ryan.finalproject.GifView
+    <ImageView
         android:layout_width="240dp"
         android:layout_height="150dp"
+        android:background="@drawable/title"
         android:id="@+id/imageView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
