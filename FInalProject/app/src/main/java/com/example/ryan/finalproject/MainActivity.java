@@ -73,10 +73,6 @@ public class MainActivity extends AppCompatActivity {
                     });
             builder.show();
         }
-        else {
-            Toast toast = Toast.makeText(getApplicationContext(),"Welcome back "+username,Toast.LENGTH_LONG);
-            toast.show();
-        }
     }
 
     class addUserToDatabase extends AsyncTask<String,Void,String> {
