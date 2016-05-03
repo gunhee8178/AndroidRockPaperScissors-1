@@ -1,24 +1,42 @@
 package com.example.ryan.finalproject;
 
+import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.util.JsonReader;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
-public class leaderboard extends AppCompatActivity {
+public class leaderboard extends ListActivity {
+    LeaderboardAdapter adapter = null;
+    ArrayList<LeaderBoxes> leadersArray = new ArrayList<>();
+    private int index = 0;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leaderboard);
+        adapter = new LeaderboardAdapter(getApplicationContext());
         new getLeaders().execute("");
+
+        View headerView = (View) LayoutInflater.from(getApplicationContext()).inflate(R.layout.leaderboard, null);
+        getListView().addHeaderView(headerView);
+
+        getListView().setAdapter(adapter);
+
+        new getLeaders().execute("");
+
     }
 
 
@@ -39,7 +57,8 @@ public class leaderboard extends AppCompatActivity {
                     Log.i("STR",sb.toString());
                     br.close();
 
-                   // JSONObject reader = new JSONObject(sb.toString());
+                    return sb.toString();
+
                 } catch(IOException e) {
 
                 }
@@ -52,10 +71,76 @@ public class leaderboard extends AppCompatActivity {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
+            InputStream stream = new ByteArrayInputStream(result.getBytes(Charset.forName("UTF-8")));
+            try {
+                List list = readJsonStream(stream);
+                for(int i = 0; i < list.size(); i++) {
+                    User tmp = (User) list.get(i);
+                    LeaderBoxes leaderItem = new LeaderBoxes(Integer.toString(i),tmp.user_name,tmp.wins);
+                    adapter.add(leaderItem);
+                }
+            }
+            catch(IOException e) {
+            }
         }
     }
 
-    public void parseString(String str) {
+    class User {
+        public String user_name;
+        public String wins;
+        public String losses;
+        public String draws;
 
+        public User(String user_name, String wins, String losses, String draws) {
+            this.user_name = user_name;
+            this.wins = wins;
+            this.losses = losses;
+            this.draws = draws;
+        }
+    }
+
+    public List readJsonStream(InputStream in) throws IOException {
+        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+        try {
+            return readMessagesArray(reader);
+        } finally {
+            reader.close();
+        }
+    }
+
+    public List readMessagesArray(JsonReader reader) throws IOException {
+        List messages = new ArrayList();
+
+        reader.beginArray();
+        while (reader.hasNext()) {
+            messages.add(readMessage(reader));
+        }
+        reader.endArray();
+        return messages;
+    }
+
+    public User readMessage(JsonReader reader) throws IOException {
+        String user_name = null;
+        String wins = null;
+        String losses = null;
+        String draws = null;
+
+        reader.beginObject();
+        while (reader.hasNext()) {
+            String name = reader.nextName();
+            if (name.equals("user_name")) {
+                user_name = reader.nextString();
+            } else if (name.equals("wins")) {
+                wins = reader.nextString();
+            } else if (name.equals("losses")) {
+                losses = reader.nextString();
+            } else if (name.equals("draws")) {
+                draws = reader.nextString();
+            } else {
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+        return new User(user_name, wins, losses, draws);
     }
 }
