@@ -19,9 +19,7 @@ package com.example.android.wifidirect;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -29,19 +27,16 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
 
 import java.io.DataInputStream;
-
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -59,6 +54,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
     private WifiP2pDevice device;
     private WifiP2pInfo info;
     ProgressDialog progressDialog = null;
+    private String p1move;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -223,7 +219,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
      * A simple server socket that accepts connection and writes some data on
      * the stream.
      */
-    public static class FileServerAsyncTask extends AsyncTask<Void, Void, String> {
+    public class FileServerAsyncTask extends AsyncTask<Void, Void, String> {
 
         private Context context;
         private TextView statusText;
@@ -281,16 +277,18 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 				protected void onPostExecute(String result) {
 						if (result != null) {
 							Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
-							if (result == "start playing"){
+
+							if (result.equals("start playing")){
+                                Log.i("Post exec", result);
 								Intent intent = new Intent();
 								intent.setClass(context, networkPlayer.class);
-								startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
+								DeviceDetailFragment.this.startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
 							} else {
 								Intent intent = new Intent();
 								intent.setClass(context, networkResult.class);
 								intent.putExtra("p1Move", p1move);
 								intent.putExtra("p2Move", result);
-								startActivity(intent);
+								context.startActivity(intent);
 							}
 						}
 						statusText.setText("Closing the server socket");
