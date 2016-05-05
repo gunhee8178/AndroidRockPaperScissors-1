@@ -16,6 +16,7 @@
 
 package com.example.android.wifidirect;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -26,6 +27,7 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,7 +56,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
     private WifiP2pDevice device;
     private WifiP2pInfo info;
     ProgressDialog progressDialog = null;
-    private String p1move;
+    public String p1move = "";
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -234,65 +236,80 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         }
 
        @Override
-				protected String doInBackground(Void... params) {
-						ServerSocket serverSocket = null;
-						Socket client = null;
-						DataInputStream inputstream = null;
-						try {
-								serverSocket = new ServerSocket(8988);
-								client = serverSocket.accept();
-								inputstream = new DataInputStream(client.getInputStream());
-								String str = inputstream.readUTF();
-								serverSocket.close();
-								return str;
-						} catch (IOException e) {
+	protected String doInBackground(Void... params) {
+			ServerSocket serverSocket = null;
+			Socket client = null;
+			DataInputStream inputstream = null;
+			try {
+					serverSocket = new ServerSocket(8988);
+					client = serverSocket.accept();
+					inputstream = new DataInputStream(client.getInputStream());
+					String str = inputstream.readUTF();
+					serverSocket.close();
+					return str;
+			} catch (IOException e) {
+					Log.e(WiFiDirectActivity.TAG, e.getMessage());
+					return null;
+			}finally{
+					if(inputstream != null){
+						 try{
+								inputstream.close();
+						 } catch (IOException e) {
 								Log.e(WiFiDirectActivity.TAG, e.getMessage());
-								return null;
-						}finally{
-								if(inputstream != null){
-									 try{
-											inputstream.close();
-									 } catch (IOException e) {
-											Log.e(WiFiDirectActivity.TAG, e.getMessage());
-									 }
-								}
-								if(client != null){
-									 try{
-											client.close();
-									 } catch (IOException e) {
-											Log.e(WiFiDirectActivity.TAG, e.getMessage());
-									 }
-								}
-								 if(serverSocket != null){
-									 try{
-											serverSocket.close();
-									 } catch (IOException e) {
-											Log.e(WiFiDirectActivity.TAG, e.getMessage());
-									 }
-								}
-						}
-				}
-				
-				@Override
-				protected void onPostExecute(String result) {
-						if (result != null) {
-							Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
-
-							if (result.equals("start playing")){
-                                Log.i("Post exec", result);
-								Intent intent = new Intent();
-								intent.setClass(context, networkPlayer.class);
-								DeviceDetailFragment.this.startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
-							} else {
-								Intent intent = new Intent();
-								intent.setClass(context, networkResult.class);
-								intent.putExtra("p1Move", p1move);
-								intent.putExtra("p2Move", result);
-								context.startActivity(intent);
-							}
-						}
-						statusText.setText("Closing the server socket");
-				}
+						 }
+					}
+					if(client != null){
+						 try{
+								client.close();
+						 } catch (IOException e) {
+								Log.e(WiFiDirectActivity.TAG, e.getMessage());
+						 }
+					}
+					 if(serverSocket != null){
+						 try{
+								serverSocket.close();
+						 } catch (IOException e) {
+								Log.e(WiFiDirectActivity.TAG, e.getMessage());
+						 }
+					}
+			}
+	}
+	@Override
+	protected void onPostExecute(final String result) {
+		if (result != null) {
+			Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+			if (result.equals("start playing")) {
+	                    Intent intent = new Intent();
+	                    intent.setClass(context, networkPlayer.class);
+	                    Activity act = (Activity) context;
+	                    act.startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
+	                } else {
+	                    /*Intent intent = new Intent();
+	                    intent.setClass(context, networkResult.class);
+	                    intent.putExtra("p1Move", p1move);
+	                    intent.putExtra("p2Move", result);
+	                    context.startActivity(intent);*/
+	
+	                    // handler to wait for p1move before starting networkResults activity
+	                    final Handler handler = new Handler();
+	                    handler.postDelayed(new Runnable() {
+	                        @Override
+	                        public void run() {
+	                            if (!p1move.isEmpty()) {
+	                                handler.postDelayed(this, 1000);
+	                            } else {
+	                                Intent intent = new Intent();
+	                                intent.setClass(context, networkResult.class);
+	                                intent.putExtra("p1Move", p1move);
+	                                intent.putExtra("p2Move", result);
+	                                context.startActivity(intent);
+	                            }
+	                        }
+	                    }, 1000);
+	                }
+		}
+		statusText.setText("Closing the server socket");
+	}
 
         /*
          * (non-Javadoc)
