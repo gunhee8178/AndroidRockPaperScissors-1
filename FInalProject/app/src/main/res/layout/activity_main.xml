@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         style="@style/Widget.AppCompat.Button.Colored"
         android:text="Network Play"
-        android:id="@+id/button3"
+        android:id="@+id/networkPlay"
         android:layout_below="@+id/localPlay"
         android:layout_centerHorizontal="true" />
 
@@ -51,7 +51,7 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:text="Leaderboard"
         android:id="@+id/leaderboard"
-        android:layout_below="@+id/button3"
+        android:layout_below="@+id/networkPlay"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
