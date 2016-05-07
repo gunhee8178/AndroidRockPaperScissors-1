@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
        // final GifView gifView = (GifView) findViewById(R.id.imageView);
         final Button localPlay = (Button) findViewById(R.id.localPlay);
+        final Button networkPlay = (Button) findViewById(R.id.networkPlay);
         final Button leaderboard = (Button) findViewById(R.id.leaderboard);
 
         localPlay.setOnClickListener(new View.OnClickListener() {
@@ -41,6 +42,16 @@ public class MainActivity extends AppCompatActivity {
                 localIntent.putExtra("p2_wins","0");
                 localIntent.putExtra("draws","0");
                 startActivity(localIntent);
+            }
+        });
+        
+        networkPlay.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent networkIntent = new Intent(getApplicationContext(),WiFiDirectActivity.class);
+                networkIntent.putExtra("p1_wins","0");
+                networkIntent.putExtra("p2_wins","0");
+                networkIntent.putExtra("draws","0");
+                startActivity(networkIntent);
             }
         });
 
