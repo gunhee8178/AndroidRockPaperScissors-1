@@ -15,6 +15,7 @@ public class networkPlayer extends Activity{
     Runnable r=new Runnable() {
         @Override
         public void run() {
+            setResult(DeviceDetailFragment.CHOOSE_FILE_RESULT_CODE, intent);
             finish();
         }
     };
@@ -27,9 +28,9 @@ public class networkPlayer extends Activity{
         Intent last_intent = getIntent();
 
         intent = new Intent();
-				intent.putExtra("p1move", "nothing");
-        
-				intent.putExtra("p1_wins",last_intent.getStringExtra("p1_wins"));
+        intent.putExtra("p1move", "nothing");
+
+        intent.putExtra("p1_wins",last_intent.getStringExtra("p1_wins"));
         intent.putExtra("p2_wins",last_intent.getStringExtra("p2_wins"));
         intent.putExtra("draws",last_intent.getStringExtra("draws"));
 
@@ -40,27 +41,27 @@ public class networkPlayer extends Activity{
         rock.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 intent.putExtra("p1move", "rock");
-								setResult(DeviceDetailFragment.CHOOSE_FILE_RESULT_CODE, intent);
-                //finish();
+                setResult(DeviceDetailFragment.CHOOSE_FILE_RESULT_CODE, intent);
+                finish();
             }
         });
 
         paper.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 intent.putExtra("p1move", "paper");
-								setResult(DeviceDetailFragment.CHOOSE_FILE_RESULT_CODE, intent);
-                //finish();
+                setResult(DeviceDetailFragment.CHOOSE_FILE_RESULT_CODE, intent);
+                finish();
             }
         });
 
         scissors.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 intent.putExtra("p1move", "scissors");
-								setResult(DeviceDetailFragment.CHOOSE_FILE_RESULT_CODE, intent);
-                //finish();
+                setResult(DeviceDetailFragment.CHOOSE_FILE_RESULT_CODE, intent);
+                finish();
             }
         });
 				
-				handler.postDelayed(r, 3000);
+				//handler.postDelayed(r, 3000);
     }
 }

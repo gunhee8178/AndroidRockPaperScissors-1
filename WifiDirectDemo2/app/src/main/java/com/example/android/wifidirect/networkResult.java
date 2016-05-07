@@ -32,37 +32,46 @@ public class networkResult extends Activity {
         Button playAgain = (Button) findViewById(R.id.playAgain);
         Button home = (Button) findViewById(R.id.home);
 
-        int p1_wins = Integer.parseInt(intent.getStringExtra("p1_wins"));
-        int p2_wins = Integer.parseInt(intent.getStringExtra("p2_wins"));
-        int draws = Integer.parseInt(intent.getStringExtra("draws"));
+        String p1_w_s = intent.getStringExtra("p1_wins");
+        String p2_w_s = intent.getStringExtra("p2_wins");
+        String draw_s = intent.getStringExtra("draws");
+        int p1_wins = 0;
+        if(p1_w_s != null)
+            p1_wins = Integer.parseInt(p1_w_s);
+        int p2_wins = 0;
+        if(p2_w_s != null)
+            p2_wins = Integer.parseInt(p2_w_s);
+        int draws = 0;
+        if(draw_s != null)
+            draws = Integer.parseInt(draw_s);
 
 
-        if(p1_move.equals(p2_move)) {
-            winner.setText("DRAW");
-            draws = draws + 1;
-            draw = true;
-        }
-        if(p1_move.equals("rock") && p2_move.equals("scissors")) {
-            p1_winner = true;
-        }
-        if(p1_move.equals("scissors") && p2_move.equals("paper")) {
-            p1_winner = true;
-        }
-        if(p1_move.equals("paper") && p2_move.equals("rock")) {
-            p1_winner = true;
-        }
-				if(!p1_move.equals("nothing") && p2_move.equals("nothing")) {
-            p1_winner = true;
-        }
+            if (p1_move.equals(p2_move)) {
+                winner.setText("DRAW");
+                draws = draws + 1;
+                draw = true;
+            }
+            if (p1_move.equals("rock") && p2_move.equals("scissors")) {
+                p1_winner = true;
+            }
+            if (p1_move.equals("scissors") && p2_move.equals("paper")) {
+                p1_winner = true;
+            }
+            if (p1_move.equals("paper") && p2_move.equals("rock")) {
+                p1_winner = true;
+            }
+            if (!p1_move.equals("nothing") && p2_move.equals("nothing")) {
+                p1_winner = true;
+            }
 
-        if(p1_winner) {
-            winner.setText("Player 1 wins!");
-            p1_wins = p1_wins + 1;
-        }
-        if(!p1_winner && !draw) {
-            winner.setText("Player 2 wins!");
-            p2_wins = p2_wins + 1;
-        }
+            if (p1_winner) {
+                winner.setText("Player 1 wins!");
+                p1_wins = p1_wins + 1;
+            }
+            if (!p1_winner && !draw) {
+                winner.setText("Player 2 wins!");
+                p2_wins = p2_wins + 1;
+            }
 
         p1_ratio.append(p1_wins+"-"+p2_wins+"-"+draws);
         p2_ratio.append(p2_wins+"-"+p1_wins+"-"+draws);
