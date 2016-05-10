@@ -53,11 +53,14 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
     private static String TAG = "RPSTAG";
     public static final String IP_SERVER = "192.168.49.1";
     protected static final int CHOOSE_FILE_RESULT_CODE = 20;
+    protected static final int NET_RESULT_RESULT_CODE = 40;
     private View mContentView = null;
     private WifiP2pDevice device;
     private WifiP2pInfo info;
     ProgressDialog progressDialog = null;
     private static String p1move = "";
+    private static int p1wins = 0,p2wins = 0,draws = 0;
+    private static boolean netRunning = false;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -87,7 +90,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 //                                ((DeviceActionListener) getActivity()).cancelDisconnect();
 //                            }
 //                        }
-                );
+                        );
                 ((DeviceActionListener) getActivity()).connect(config);
 
             }
@@ -116,16 +119,18 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                         String message = "start playing";
                         TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
                         statusText.setText("Sending: " + message);
-                        Log.i(WiFiDirectActivity.TAG, "Intent----------- " + message);
-                        Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
-                        serviceIntent.setAction(FileTransferService.ACTION_SEND_MOVE);
-                        serviceIntent.putExtra(FileTransferService.SEND_MESSAGE, message);
-                        serviceIntent.putExtra(FileTransferService.EXTRAS_ADDRESS, info.groupOwnerAddress.getHostAddress());
-                        serviceIntent.putExtra(FileTransferService.EXTRAS_PORT, 8988);
+                        Log.i(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "Intent----------- " + message);
+                        Intent serviceIntent = new Intent(getActivity(), com.example.ryan.finalproject.FileTransferService.class);
+                        serviceIntent.setAction(com.example.ryan.finalproject.FileTransferService.ACTION_SEND_MOVE);
+                        serviceIntent.putExtra(com.example.ryan.finalproject.FileTransferService.SEND_MESSAGE, message);
+                        serviceIntent.putExtra(com.example.ryan.finalproject.FileTransferService.EXTRAS_ADDRESS, info.groupOwnerAddress.getHostAddress());
+                        serviceIntent.putExtra(com.example.ryan.finalproject.FileTransferService.EXTRAS_PORT, 8988);
                         getActivity().startService(serviceIntent);
 
-                        Intent intent = new Intent(getActivity().getApplicationContext(), networkPlayer.class);
-                        Log.i(WiFiDirectActivity.TAG,"Starting network player from on click listener");
+                        Intent intent = new Intent(getActivity().getApplicationContext(), com.example.ryan.finalproject.networkPlayer.class);
+                        Log.i(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "Starting network player from on click listener");
+                        Log.i(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "Starting async task for non group owner");
+                        new FileServerAsyncTask(getActivity().getApplicationContext(), mContentView.findViewById(R.id.status_text), false).execute();
                         startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
                     }
                 });
@@ -135,36 +140,42 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == CHOOSE_FILE_RESULT_CODE) {
+            String localIP = com.example.ryan.finalproject.Utils.getLocalIPAddress();
+            Log.i(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "localIP: " + localIP);
 
-        String localIP = Utils.getLocalIPAddress();
-        Log.i(WiFiDirectActivity.TAG,"localIP: " + localIP);
+            // User has picked an image. Transfer it to group owner i.e peer using
+            // FileTransferService.
+            p1move = data.getStringExtra("p1move");
+            Toast.makeText(getActivity().getApplicationContext(), "You picked " + p1move, Toast.LENGTH_SHORT).show();
+            TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
+            statusText.setText("Sending: " + p1move);
+            Log.i(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "Intent----------- " + p1move);
+            Intent serviceIntent = new Intent(getActivity(), com.example.ryan.finalproject.FileTransferService.class);
+            serviceIntent.setAction(com.example.ryan.finalproject.FileTransferService.ACTION_SEND_MOVE);
+            serviceIntent.putExtra(com.example.ryan.finalproject.FileTransferService.SEND_MESSAGE, p1move);
 
-        // User has picked an image. Transfer it to group owner i.e peer using
-        // FileTransferService.
-        p1move = data.getStringExtra("p1move");
-        Toast.makeText(getActivity().getApplicationContext(),"You picked " + p1move,Toast.LENGTH_SHORT).show();
-        TextView statusText = (TextView) mContentView.findViewById(R.id.status_text);
-        statusText.setText("Sending: " + p1move);
-        Log.i(WiFiDirectActivity.TAG, "Intent----------- " + p1move);
-        Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
-        serviceIntent.setAction(FileTransferService.ACTION_SEND_MOVE);
-        serviceIntent.putExtra(FileTransferService.SEND_MESSAGE, p1move);
-
-        if(localIP != null && localIP.equals(IP_SERVER)){
-            String client_mac_fixed = Utils.fixMac(new String(device.deviceAddress));
-            String clientIP = Utils.getIPFromMac(client_mac_fixed);
-            Log.i(WiFiDirectActivity.TAG,"clientIP: " + clientIP);
-            Log.i(WiFiDirectActivity.TAG,"clientMac: " + client_mac_fixed);
-            serviceIntent.putExtra(FileTransferService.EXTRAS_ADDRESS, clientIP);
-        }else{
-            serviceIntent.putExtra(FileTransferService.EXTRAS_ADDRESS, IP_SERVER);
+            if (localIP != null && localIP.equals(IP_SERVER)) {
+                String client_mac_fixed = com.example.ryan.finalproject.Utils.fixMac(new String(device.deviceAddress));
+                String clientIP = com.example.ryan.finalproject.Utils.getIPFromMac(client_mac_fixed);
+                Log.i(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "clientIP: " + clientIP);
+                Log.i(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "clientMac: " + client_mac_fixed);
+                serviceIntent.putExtra(com.example.ryan.finalproject.FileTransferService.EXTRAS_ADDRESS, clientIP);
+            } else {
+                serviceIntent.putExtra(com.example.ryan.finalproject.FileTransferService.EXTRAS_ADDRESS, IP_SERVER);
+            }
+            //serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
+            //        info.groupOwnerAddress.getHostAddress());
+            serviceIntent.putExtra(com.example.ryan.finalproject.FileTransferService.EXTRAS_PORT, 8988);
+            getActivity().startService(serviceIntent);
+            /*if (localIP == null && !netRunning) {
+                Log.i(WiFiDirectActivity.TAG, "Starting async task for non group owner");
+                new FileServerAsyncTask(getActivity().getApplicationContext(), mContentView.findViewById(R.id.status_text), false).execute();
+            } else if(!netRunning){
+                Log.i(WiFiDirectActivity.TAG, "Starting async task for group owner");
+                new FileServerAsyncTask(getActivity().getApplicationContext(), mContentView.findViewById(R.id.status_text),true).execute();
+            }*/
         }
-        //serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
-        //        info.groupOwnerAddress.getHostAddress());
-        serviceIntent.putExtra(FileTransferService.EXTRAS_PORT, 8988);
-        getActivity().startService(serviceIntent);
-        if(localIP == null)
-            new FileServerAsyncTask(getActivity().getApplicationContext(),mContentView.findViewById(R.id.status_text),false).execute();
     }
 
     @Override
@@ -179,7 +190,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         TextView view = (TextView) mContentView.findViewById(R.id.group_owner);
         view.setText(getResources().getString(R.string.group_owner_text)
                 + ((info.isGroupOwner == true) ? getResources().getString(R.string.yes)
-                : getResources().getString(R.string.no)));
+                        : getResources().getString(R.string.no)));
 
         // InetAddress from WifiP2pInfo struct.
         view = (TextView) mContentView.findViewById(R.id.device_info);
@@ -189,8 +200,11 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         // server. The file server is single threaded, single connection server
         // socket.
         if (info.groupFormed && info.isGroupOwner) {
-            new FileServerAsyncTask(getActivity().getApplicationContext(), mContentView.findViewById(R.id.status_text),true)
-                    .execute();
+            if(!netRunning) {
+                Log.i(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "Starting async task for group owner");
+                new FileServerAsyncTask(getActivity().getApplicationContext(), mContentView.findViewById(R.id.status_text), true)
+                        .execute();
+            }
         } else if (info.groupFormed) {
             // The other device acts as the client. In this case, we enable the
             // get file button.
@@ -205,7 +219,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 
     /**
      * Updates the UI with device data
-     *
+     * 
      * @param device the device to be displayed
      */
     public void showDetails(WifiP2pDevice device) {
@@ -254,57 +268,60 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
             this.isGroupOwner = isGroupOwner;
         }
 
-        @Override
+       @Override
         protected String doInBackground(Void... params) {
+            netRunning = true;
             ServerSocket serverSocket = null;
             Socket client = null;
             DataInputStream inputstream = null;
             try {
-                serverSocket = new ServerSocket(8988);
-                client = serverSocket.accept();
-                inputstream = new DataInputStream(client.getInputStream());
-                String str = inputstream.readUTF();
-                serverSocket.close();
-                while(p1move.isEmpty() && !str.equals("start playing")){
-                    Log.i(WiFiDirectActivity.TAG,"Waiting for p1move");
-                }
-                return str;
+                    serverSocket = new ServerSocket(8988);
+                    client = serverSocket.accept();
+                    inputstream = new DataInputStream(client.getInputStream());
+                    String str = inputstream.readUTF();
+                    serverSocket.close();
+                    while(p1move.isEmpty() && !str.equals("start playing")){
+                        //Log.i(WiFiDirectActivity.TAG,"Waiting for p1move");
+                    }
+                    return str;
             } catch (IOException e) {
-                Log.e(WiFiDirectActivity.TAG, e.getMessage());
-                return null;
+                    Log.e(com.example.ryan.finalproject.WiFiDirectActivity.TAG, e.getMessage());
+                    return null;
             }finally{
-                if(inputstream != null){
-                    try{
-                        inputstream.close();
-                    } catch (IOException e) {
-                        Log.e(WiFiDirectActivity.TAG, e.getMessage());
+                    if(inputstream != null){
+                         try{
+                                inputstream.close();
+                         } catch (IOException e) {
+                                Log.e(com.example.ryan.finalproject.WiFiDirectActivity.TAG, e.getMessage());
+                         }
                     }
-                }
-                if(client != null){
-                    try{
-                        client.close();
-                    } catch (IOException e) {
-                        Log.e(WiFiDirectActivity.TAG, e.getMessage());
+                    if(client != null){
+                         try{
+                                client.close();
+                         } catch (IOException e) {
+                                Log.e(com.example.ryan.finalproject.WiFiDirectActivity.TAG, e.getMessage());
+                         }
                     }
-                }
-                if(serverSocket != null){
-                    try{
-                        serverSocket.close();
-                    } catch (IOException e) {
-                        Log.e(WiFiDirectActivity.TAG, e.getMessage());
+                     if(serverSocket != null){
+                         try{
+                                serverSocket.close();
+                         } catch (IOException e) {
+                                Log.e(com.example.ryan.finalproject.WiFiDirectActivity.TAG, e.getMessage());
+                         }
                     }
-                }
             }
         }
         @Override
         protected void onPostExecute(final String result) {
             Toast.makeText(getActivity().getApplicationContext(),result,Toast.LENGTH_SHORT).show();
+            netRunning = false;
             if (result != null) {
                 Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
-                Log.i(WiFiDirectActivity.TAG, "Entered on post execute with a result " + result);
+                Log.i(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "Entered on post execute with a result " + result);
                 if (result.equals("start playing")) {
                     Intent intent = new Intent();
-                    intent.setClass(context, networkPlayer.class);
+                    intent.setClass(context, com.example.ryan.finalproject.networkPlayer.class);
+                    new FileServerAsyncTask(context,statusText,isGroupOwner).execute();
                     startActivityForResult(intent, CHOOSE_FILE_RESULT_CODE);
                 } else if (isGroupOwner) {
                     /*Intent intent = new Intent();
@@ -319,12 +336,12 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                         @Override
                         public void run() {
                             if (p1move.isEmpty()) {
-                                Log.i(WiFiDirectActivity.TAG, "Waiting for p1");
+                                Log.i(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "Waiting for p1");
                                 handler.postDelayed(this, 1000);
                             } else {
-                                Log.i(WiFiDirectActivity.TAG, "Have a move for both players. p1: " + p1move + " p2: " + result);
+                                Log.i(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "Have a move for both players. p1: " + p1move + " p2: " + result);
                                 Intent intent = new Intent();
-                                intent.setClass(context, networkResult.class);
+                                intent.setClass(context, com.example.ryan.finalproject.networkResult.class);
                                 intent.putExtra("p1Move", p1move);
                                 intent.putExtra("p2Move", result);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -339,12 +356,12 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                         @Override
                         public void run() {
                             if (p1move.isEmpty()) {
-                                Log.i(WiFiDirectActivity.TAG, "Waiting for p1");
+                                Log.i(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "Waiting for p1");
                                 handler.postDelayed(this, 1000);
                             } else {
-                                Log.i(WiFiDirectActivity.TAG, "P1: " + p1move + " P2: " + result);
+                                Log.i(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "P1: " + p1move + " P2: " + result);
                                 Intent intent = new Intent();
-                                intent.setClass(context, networkResult.class);
+                                intent.setClass(context, com.example.ryan.finalproject.networkResult.class);
                                 intent.putExtra("p1Move", p1move);
                                 intent.putExtra("p2Move", result);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -374,7 +391,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         byte buf[] = new byte[1024];
         int len;
         long startTime=System.currentTimeMillis();
-
+        
         try {
             while ((len = inputStream.read(buf)) != -1) {
                 out.write(buf, 0, len);
@@ -383,9 +400,9 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
             inputStream.close();
             long endTime=System.currentTimeMillis()-startTime;
             Log.v("","Time taken to transfer all bytes is : "+endTime);
-
+            
         } catch (IOException e) {
-            Log.d(WiFiDirectActivity.TAG, e.toString());
+            Log.d(com.example.ryan.finalproject.WiFiDirectActivity.TAG, e.toString());
             return false;
         }
         return true;

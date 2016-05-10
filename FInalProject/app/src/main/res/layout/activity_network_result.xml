@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#FFFFFF"
-    tools:context="com.example.ryan.finalproject.networkResult">
+    tools:context="com.example.android.wifidirect.networkResult">
 
     <Button
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <TextView
+   <!-- <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -27,9 +27,9 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
         android:id="@+id/p1"
-        android:layout_below="@+id/winner" />
+        android:layout_below="@+id/winner" />-->
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -37,23 +37,22 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
         android:id="@+id/p2"
-        android:layout_below="@+id/p1" />
+        android:layout_below="@+id/p1" />-->
 
-    <Button
+    <!--<Button
         android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="PLAY AGAIN"
         android:id="@+id/playAgain"
         android:layout_below="@+id/p2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="111dp" />
+        android:layout_marginTop="111dp" />-->
 
     <Button
         android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="HOME"
         android:id="@+id/home"
-        android:layout_below="@+id/playAgain"
+        android:layout_below="@+id/winner"
         android:layout_centerHorizontal="true" />
-
 </RelativeLayout>

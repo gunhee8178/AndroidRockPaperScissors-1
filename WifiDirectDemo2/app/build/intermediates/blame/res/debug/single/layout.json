@@ -1,18 +1,42 @@
 [
     {
-        "merged": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\device_list.xml",
-        "source": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\src\\main\\res\\layout\\device_list.xml"
-    },
-    {
         "merged": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\main.xml",
         "source": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\src\\main\\res\\layout\\main.xml"
     },
     {
-        "merged": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\device_detail.xml",
-        "source": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\src\\main\\res\\layout\\device_detail.xml"
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\device_detail.xml",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\layout\\device_detail.xml"
+    },
+    {
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\device_list.xml",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\layout\\device_list.xml"
     },
     {
         "merged": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\row_devices.xml",
         "source": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\src\\main\\res\\layout\\row_devices.xml"
+    },
+    {
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_network_result.xml",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\layout\\activity_network_result.xml"
+    },
+    {
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\main.xml",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\layout\\main.xml"
+    },
+    {
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_network_player.xml",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\layout\\activity_network_player.xml"
+    },
+    {
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\row_devices.xml",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\layout\\row_devices.xml"
+    },
+    {
+        "merged": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\device_list.xml",
+        "source": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\src\\main\\res\\layout\\device_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout\\device_detail.xml",
+        "source": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\src\\main\\res\\layout\\device_detail.xml"
     }
 ]

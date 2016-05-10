@@ -1,11 +1,39 @@
 [
     {
-        "merged": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_launcher.png",
-        "source": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\src\\main\\res\\drawable-xhdpi\\ic_launcher.png"
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\paper.jpeg",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\drawable-xhdpi\\paper.jpeg"
+    },
+    {
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\scissor.jpeg",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\drawable-xhdpi\\scissor.jpeg"
+    },
+    {
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_action_on_off.png",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\drawable-xhdpi\\ic_action_on_off.png"
     },
     {
         "merged": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_action_discover.png",
         "source": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\src\\main\\res\\drawable-xhdpi\\ic_action_discover.png"
+    },
+    {
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_action_discover.png",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\drawable-xhdpi\\ic_action_discover.png"
+    },
+    {
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_launcher.png",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\drawable-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\player1.png",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\drawable-xhdpi\\player1.png"
+    },
+    {
+        "merged": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_launcher.png",
+        "source": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\src\\main\\res\\drawable-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\rock.jpeg",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\drawable-xhdpi\\rock.jpeg"
     },
     {
         "merged": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_action_on_off.png",

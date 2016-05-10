@@ -13,4 +13,10 @@
         android:icon="@drawable/ic_action_discover"
         android:title="@string/discover_peers_button"
         compat:showAsAction="ifRoom|withText" />
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/icon"
+        android:title="Home"
+        compat:showAsAction="ifRoom|withText" />
 </menu>

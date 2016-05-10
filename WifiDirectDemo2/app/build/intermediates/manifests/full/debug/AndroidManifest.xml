@@ -35,6 +35,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.example.android.wifidirect.networkPlayer" />
+        <activity android:name="com.example.android.wifidirect.networkResult" />
 
         <!-- Used for transferring files  after a successful connection -->
         <service

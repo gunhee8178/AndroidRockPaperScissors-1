@@ -68,7 +68,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
     }
 
     private static String getDeviceStatus(int deviceStatus) {
-        Log.d(WiFiDirectActivity.TAG, "Peer status :" + deviceStatus);
+        Log.d(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "Peer status :" + deviceStatus);
         switch (deviceStatus) {
             case WifiP2pDevice.AVAILABLE:
                 return "Available";
@@ -108,7 +108,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
          * @param objects
          */
         public WiFiPeerListAdapter(Context context, int textViewResourceId,
-                                   List<WifiP2pDevice> objects) {
+                List<WifiP2pDevice> objects) {
             super(context, textViewResourceId, objects);
             items = objects;
 
@@ -141,7 +141,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
 
     /**
      * Update UI for this device.
-     *
+     * 
      * @param device WifiP2pDevice object
      */
     public void updateThisDevice(WifiP2pDevice device) {
@@ -161,7 +161,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
         peers.addAll(peerList.getDeviceList());
         ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
         if (peers.size() == 0) {
-            Log.d(WiFiDirectActivity.TAG, "No devices found");
+            Log.d(com.example.ryan.finalproject.WiFiDirectActivity.TAG, "No devices found");
             return;
         }
 
@@ -173,7 +173,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
     }
 
     /**
-     *
+     * 
      */
     public void onInitiateDiscovery() {
         if (progressDialog != null && progressDialog.isShowing()) {
@@ -184,7 +184,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
 
                     @Override
                     public void onCancel(DialogInterface dialog) {
-
+                        
                     }
                 });
     }

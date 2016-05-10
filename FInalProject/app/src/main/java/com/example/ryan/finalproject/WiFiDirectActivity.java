@@ -16,8 +16,6 @@
 
 package com.example.ryan.finalproject;
 
-import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +28,7 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -78,7 +77,7 @@ public class WiFiDirectActivity extends AppCompatActivity implements ChannelList
 
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);
-        receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);
+        receiver = new com.example.ryan.finalproject.WiFiDirectBroadcastReceiver(manager, channel, this);
     }
 
     /** register the BroadcastReceiver with the intent values to be matched */
@@ -161,6 +160,9 @@ public class WiFiDirectActivity extends AppCompatActivity implements ChannelList
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+                return true;
+            case R.id.home:
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

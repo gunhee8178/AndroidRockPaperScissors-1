@@ -2,6 +2,8 @@
 <resources>
     <color name="layout_border_color">#FF111111</color>
     <color name="status_bar_color">#FF000000</color>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="phone_list_height">200dp</dimen>
     <dimen name="tablet_list_width">300dp</dimen>
     <string name="app_name">WiFi Direct</string>
@@ -12,7 +14,7 @@
     <string name="empty"/>
     <string name="empty_message">No devices found. Turn on P2P and perform discovery from the Action Bar</string>
     <string name="enable_p2p_button">P2P On/Off</string>
-    <string name="get_file_button">Launch Gallery</string>
+    <string name="get_file_button">Start Game</string>
     <string name="group_owner_text">"Am I the Group Owner? "</string>
     <string name="label_me">ME</string>
     <string name="label_peers">PEERS</string>

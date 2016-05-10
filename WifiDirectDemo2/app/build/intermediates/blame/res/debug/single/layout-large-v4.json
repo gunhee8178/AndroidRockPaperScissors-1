@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout-large-v4\\main.xml",
+        "source": "C:\\Users\\kylem\\Documents\\AndroidRockPaperScissors\\WifiDirectDemo2\\app\\src\\main\\res\\layout-large\\main.xml"
+    },
+    {
         "merged": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\build\\intermediates\\res\\merged\\debug\\layout-large-v4\\main.xml",
         "source": "C:\\Users\\YOMI\\Desktop\\WifiDirectDemo2\\app\\src\\main\\res\\layout-large\\main.xml"
     }

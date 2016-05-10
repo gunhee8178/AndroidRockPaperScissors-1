@@ -1,8 +1,8 @@
 package com.example.ryan.finalproject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
@@ -10,8 +10,8 @@ import android.widget.Button;
 public class networkPlayer extends Activity{
 
     Intent intent;
-
-    Handler handler = new Handler();
+		
+		Handler handler = new Handler();
     Runnable r=new Runnable() {
         @Override
         public void run() {
@@ -19,7 +19,7 @@ public class networkPlayer extends Activity{
             finish();
         }
     };
-
+		
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +61,7 @@ public class networkPlayer extends Activity{
                 finish();
             }
         });
-
-        //handler.postDelayed(r, 3000);
+				
+				//handler.postDelayed(r, 3000);
     }
 }

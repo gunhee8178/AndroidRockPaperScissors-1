@@ -21,9 +21,9 @@ public class FileTransferService extends IntentService {
     private static final int SOCKET_TIMEOUT = 5000;
     public static final String ACTION_SEND_MOVE = "com.example.android.wifidirect.SEND_MOVE";
 		public static final String SEND_MESSAGE = "message to send";
-    public static final String EXTRAS_FILE_PATH = "file_url";
-    public static final String EXTRAS_GROUP_OWNER_ADDRESS = "go_host";
-    public static final String EXTRAS_GROUP_OWNER_PORT = "go_port";
+	public static final String EXTRAS_FILE_PATH = "file_url";
+	public static final String EXTRAS_ADDRESS = "go_host";
+	public static final String EXTRAS_PORT = "go_port";
 
     public FileTransferService(String name) {
         super(name);
@@ -41,9 +41,9 @@ public class FileTransferService extends IntentService {
 		protected void onHandleIntent(Intent intent) {
 			Context context = getApplicationContext();
 			if (intent.getAction().equals(ACTION_SEND_MOVE)) {
-				String host = intent.getExtras().getString(EXTRAS_GROUP_OWNER_ADDRESS);
+				String host = intent.getExtras().getString(EXTRAS_ADDRESS);
 				Socket socket = new Socket();
-				int port = intent.getExtras().getInt(EXTRAS_GROUP_OWNER_PORT);
+				int port = intent.getExtras().getInt(EXTRAS_PORT);
 				DataOutputStream stream = null;
 				try {
 					socket.connect((new InetSocketAddress(host, port)), SOCKET_TIMEOUT);
