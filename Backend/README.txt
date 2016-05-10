@@ -23,3 +23,6 @@ STEPS ON HOW TO CREATE MYSQL TABLE:
         public $user = "umdandro";
         public $password = "cmscpass1";
         public $database = "umdandro_app";
+
+***NOTE***
+In the android source code it uses the web server we have set up so changes to ConnectionManager.php will not affect the app
