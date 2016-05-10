@@ -1,4 +1,7 @@
 <?php
+    /*
+      Note: ConnectionManager.php was created by Ryan Bern for CMSC389P
+    */
     class ConnectionManager {
         public $host = "localhost";
         public $user = "umdandro";
